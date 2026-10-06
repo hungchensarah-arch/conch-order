@@ -2,154 +2,156 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🐚 幸福海螺 Conch Baking 團購助手</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐚 幸福海螺 團購單</title>
     <style>
-        body {
-            font-family: 'Segoe UI', "Microsoft JhengHei", sans-serif;
-            background: linear-gradient(135deg, #fceeb5, #f5cd79);
-            min-height: 100vh;
-            display: flex; justify-content: center; align-items: center; margin: 0; padding: 20px;
-            box-sizing: border-box;
-        }
-        .container {
-            background-color: white; padding: 25px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 100%; max-width: 500px;
-        }
-        .logo-area { text-align: center; margin-bottom: 10px; }
-        .logo-title { color: #cf6a17; margin: 0; font-size: 26px; font-weight: bold; }
-        .subtitle { color: #636e72; margin-bottom: 20px; text-align: center; font-size: 13px; }
-        
-        .name-group {
-            margin-bottom: 20px; background: #fff8eb; padding: 15px;
-            border-radius: 12px; border: 1px solid #ffeaa7;
-        }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #2d3436; }
-        input[type="text"] {
-            width: 100%; padding: 12px; border: 2px solid #dfe6e9;
-            border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none;
-        }
-        input[type="text"]:focus { border-color: #e67e22; }
-
-        .menu-section-title {
-            font-size: 14px; color: #7f8c8d; font-weight: bold;
-            margin: 15px 0 8px 5px; border-left: 3px solid #e67e22; padding-left: 8px;
-        }
-        .menu-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 10px; border-bottom: 1px solid #f1f2f6;
-        }
-        .item-details { text-align: left; }
-        .item-name { font-weight: bold; color: #2d3436; font-size: 16px; }
-        .item-price { color: #e67e22; font-size: 14px; font-weight: bold; margin-top: 2px; }
-        
-        /* 數量控制區 */
-        .counter { display: flex; align-items: center; gap: 12px; }
-        
-        /* 將按鈕改為純 div，徹底解決手機點擊失效問題 */
-        .btn-calc {
-            background-color: #f1f2f6; width: 36px; height: 36px;
-            border-radius: 50%; font-size: 22px; font-weight: bold; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; color: #2d3436;
-            user-select: none; -webkit-tap-highlight-color: transparent;
-        }
-        .btn-calc:active { background-color: #dfe6e9; }
-        .counter-value { font-size: 18px; font-weight: bold; width: 24px; text-align: center; color: #2d3436; }
-
-        .summary-bar {
-            background: #f5f6fa; border-radius: 12px; padding: 15px;
-            margin-top: 25px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .summary-text { font-size: 15px; color: #2d3436; text-align: left; line-height: 1.4; }
-        .total-amount { color: #e74c3c; font-size: 22px; font-weight: bold; }
-
-        /* 大送出按鈕 */
-        .btn-submit {
-            background: linear-gradient(135deg, #e67e22, #f39c12);
-            color: white; width: 100%; padding: 15px; text-align: center;
-            border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px;
-            box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent;
-        }
-        .btn-submit:active { opacity: 0.9; }
-
-        /* 彈出視窗 */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 100; justify-content: center; align-items: center;
-        }
-        .modal-content {
-            background: white; border-radius: 20px; width: 85%; max-width: 380px; padding: 25px;
-            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); box-sizing: border-box;
-        }
-        .success-icon { font-size: 40px; margin-bottom: 5px; }
-        .thank-title { font-size: 22px; font-weight: bold; color: #2ecc71; margin-bottom: 10px; }
-        .price-box { background-color: #f5f6fa; padding: 10px; border-radius: 10px; margin: 10px 0; font-size: 15px; }
-        .price-amount { color: #e74c3c; font-size: 24px; font-weight: bold; }
-        
-        .text-box-label { font-size: 13px; color: #e67e22; font-weight: bold; text-align: left; margin: 10px 0 5px 0; display: block;}
-        textarea { width: 100%; height: 110px; border: 2px dashed #b2bec3; border-radius: 8px; padding: 8px; box-sizing: border-box; font-size: 13px; resize: none; background: #fafafa; }
-        
-        .amber-notice { color: #636e72; font-size: 13px; line-height: 1.4; margin-top: 12px; text-align: left; border-top: 1px dashed #dfe6e9; padding-top: 10px; }
-        .btn-close { background: #e67e22; color: white; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; font-size: 16px; text-align: center; box-sizing: border-box; }
+        body { font-family: sans-serif; background: #f5cd79; padding: 20px; display: flex; justify-content: center; }
+        .container { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 450px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .name-group { margin-bottom: 20px; text-align: left; background: #fff8eb; padding: 15px; border-radius: 10px; }
+        input[type="text"] { width: 100%; padding: 10px; box-sizing: border-box; border: 2px solid #dfe6e9; border-radius: 8px; font-size: 16px; }
+        .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 5px; border-bottom: 1px solid #eee; }
+        .counter { display: flex; align-items: center; gap: 15px; }
+        .btn-calc { background: #f1f2f6; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; user-select: none; }
+        .btn-calc:active { background: #dfe6e9; }
+        .counter-value { font-size: 18px; font-weight: bold; width: 20px; text-align: center; }
+        .summary { background: #fafafa; padding: 15px; margin-top: 20px; border-radius: 10px; display: flex; justify-content: space-between; font-weight: bold; }
+        .btn-submit { background: #e67e22; color: white; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        /* 彈窗 */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 85%; max-width: 350px; text-align: center; }
+        textarea { width: 100%; height: 120px; margin-top: 10px; font-size: 13px; resize: none; padding: 5px; box-sizing: border-box; }
+        .btn-close { background: #e67e22; color: white; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo-area">
-        <div class="logo-title">🐚 幸福海螺</div>
-        <div style="font-size: 11px; color: #b2bec3; letter-spacing: 2px; margin-top: 2px;">CONCH BAKING 團購單</div>
-    </div>
-    <div class="subtitle">請填寫稱呼並選擇各口味數量，完成後一鍵送出</div>
+    <h2>🐚 幸福海螺 團購單</h2>
+    <p style="color:#636e72; font-size:14px;">請輸入名字並加減數量，完成後點擊最下方送出</p>
 
     <div class="name-group">
-        <label for="userName">👤 您的稱呼：</label>
-        <input type="text" id="userName" placeholder="請輸入您的名字">
+        <label style="font-weight:bold; display:block; margin-bottom:5px;">👤 您的稱呼：</label>
+        <input type="text" id="userName" placeholder="請輸入名字">
     </div>
 
-    <!-- 利用 HTML 直接綁定 onclick 函數，避開所有手機版安全限制 -->
-    <div id="menu-container">
-        <div class="menu-section-title">經典單口味曲奇</div>
+    <div id="menu-list">
+        <!-- 每一行都直接帶有獨立的品名、價格與各自對應的數字 ID -->
         <div class="menu-item" data-price="280" data-name="奶油曲奇">
-            <div class="item-details"><div class="item-name">奶油曲奇</div><div class="item-price">$280</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_0">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
+            <div style="text-align:left;"><b>奶油曲奇</b><br><span style="color:#e67e22;">\$280</span></div>
+            <div class="counter"><div class="btn-calc" onclick="minus(0)">-</div><span class="counter-value" id="val_0">0</span><div class="btn-calc" onclick="plus(0)">+</div></div>
         </div>
         <div class="menu-item" data-price="290" data-name="巧克力曲奇">
-            <div class="item-details"><div class="item-name">巧克力曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_1">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
+            <div style="text-align:left;"><b>巧克力曲奇</b><br><span style="color:#e67e22;">\$290</span></div>
+            <div class="counter"><div class="btn-calc" onclick="minus(1)">-</div><span class="counter-value" id="val_1">0</span><div class="btn-calc" onclick="plus(1)">+</div></div>
         </div>
         <div class="menu-item" data-price="290" data-name="咖啡曲奇">
-            <div class="item-details"><div class="item-name">咖啡曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_2">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
-        </div>
-        <div class="menu-item" data-price="290" data-name="芝麻曲奇">
-            <div class="item-details"><div class="item-name">芝麻曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_3">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
-        </div>
-        <div class="menu-item" data-price="290" data-name="伯爵紅茶曲奇">
-            <div class="item-details"><div class="item-name">伯爵紅茶曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_4">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
-        </div>
-        <div class="menu-item" data-price="320" data-name="抹茶曲奇">
-            <div class="item-details"><div class="item-name">抹茶曲奇</div><div class="item-price">$320</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_5">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
-        </div>
-
-        <div class="menu-section-title">熱門雙拼 / 三元曲奇</div>
-        <div class="menu-item" data-price="310" data-name="奶巧雙拼">
-            <div class="item-details"><div class="item-name">奶巧雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+巧克力)</span></div><div class="item-price">$310</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_6">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
-        </div>
-        <div class="menu-item" data-price="310" data-name="奶咖雙拼">
-            <div class="item-details"><div class="item-name">奶咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+咖啡)</span></div><div class="item-price">$310</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_7">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
-        </div>
-        <div class="menu-item" data-price="310" data-name="巧咖雙拼">
-            <div class="item-details"><div class="item-name">巧咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(巧克力+咖啡)</span></div><div class="item-price">$310</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_8">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
+            <div style="text-align:left;"><b>咖啡曲奇</b><br><span style="color:#e67e22;">\$290</span></div>
+            <div class="counter"><div class="btn-calc" onclick="minus(2)">-</div><span class="counter-value" id="val_2">0</span><div class="btn-calc" onclick="plus(2)">+</div></div>
         </div>
         <div class="menu-item" data-price="330" data-name="三元曲奇">
-            <div class="item-details"><div class="item-name">三元曲奇 <span style="font-size:12px; color:#7f8c8d;">(內含三種)</span></div><div class="item-price">$330</div></div>
-            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_9">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
+            <div style="text-align:left;"><b>三元曲奇</b><br><span style="color:#e67e22;">\$330</span></div>
+            <div class="counter"><div class="btn-calc" onclick="minus(3)">-</div><span class="counter-value" id="val_3">0</span><div class="btn-calc" onclick="plus(3)">+</div></div>
         </div>
+    </div>
 
+    <div class="summary">
+        <div>總盒數：<span id="totalItems">0</span> 盒</div>
+        <div style="color:#e74c3c;">總金額：\$ <span id="totalPrice">0</span></div>
+    </div>
+
+    <div class="btn-submit" onclick="sendOrder()">🎉 確認送出訂單</div>
+</div>
+
+<!-- 彈出視窗 -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <h3>🎉 感謝您的訂購！</h3>
+        <p>應付總金額：<b style="color:#e74c3c; font-size:20px;">\$ <span id="modalMoney">0</span> 元</b></p>
+        <p style="font-size:13px; color:#e67e22; text-align:left; margin-bottom:2px;">👇 請全選並複製下方文字框：</p>
+        <textarea id="resultText" readonly></textarea>
+        <p style="font-size:13px; color:#636e72; text-align:left; border-top:1px dashed #ccc; padding-top:10px; margin-top:10px;">💡 <b>Amber 提示：</b><br>請複製上方明細貼回 LINE 群組，Amber 確認訂單後會和您收取。</p>
+        <div class="btn-close" onclick="closeModal()">複製好了，返回群組</div>
+    </div>
+</div>
+
+<script>
+    // 陣列對應上方的 4 個項目：奶油(0), 巧克力(1), 咖啡(2), 三元(3)
+    const itemsData = [
+        { name: "奶油曲奇", price: 280, qty: 0 },
+        { name: "巧克力曲奇", price: 290, qty: 0 },
+        { name: "咖啡曲奇", price: 290, qty: 0 },
+        { name: "三元曲奇", price: 330, qty: 0 }
+    ];
+
+    function plus(index) {
+        itemsData[index].qty++;
+        document.getElementById('val_' + index).textContent = itemsData[index].qty;
+        updateSummary();
+    }
+
+    function minus(index) {
+        if (itemsData[index].qty > 0) {
+            itemsData[index].qty--;
+            document.getElementById('val_' + index).textContent = itemsData[index].qty;
+            updateSummary();
+        }
+    }
+
+    function updateSummary() {
+        let totalQty = 0;
+        let totalPrice = 0;
+        for (let i = 0; i < itemsData.length; i++) {
+            totalQty += itemsData[i].qty;
+            totalPrice += itemsData[i].qty * itemsData[i].price;
+        }
+        document.getElementById('totalItems').textContent = totalQty;
+        document.getElementById('totalPrice').textContent = totalPrice.toLocaleString();
+    }
+
+    function sendOrder() {
+        const name = document.getElementById('userName').value.trim();
+        if (!name) { alert("請填寫您的稱呼！"); return; }
+        
+        let totalQty = 0;
+        let totalPrice = 0;
+        let text = `📝 幸福海螺訂單\n👤 訂購人：${name}\n------------------\n`;
+        
+        for (let i = 0; i < itemsData.length; i++) {
+            if (itemsData[i].qty > 0) {
+                text += `🔹 ${itemsData[i].name} x ${itemsData[i].qty}\n`;
+                totalQty += itemsData[i].qty;
+                totalPrice += itemsData[i].qty * itemsData[i].price;
+            }
+        }
+        
+        if (totalQty === 0) { alert("請至少選擇一個口味再送出！"); return; }
+        text += `------------------\n💰 總金額：$${totalPrice.toLocaleString()} 元\n\n(Amber確認訂單後會和您收取)`;
+
+        document.getElementById('resultText').value = text;
+        document.getElementById('modalMoney').textContent = totalPrice.toLocaleString();
+        document.getElementById('myModal').style.display = 'flex';
+        
+        // 嘗試自動複製
+        try { navigator.clipboard.writeText(text); } catch(e) {}
+        
+        // 自動圈選文字框
+        setTimeout(function() {
+            const ta = document.getElementById('resultText');
+            ta.focus();
+            ta.select();
+        }, 100);
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+        document.getElementById('userName').value = "";
+        for (let i = 0; i < itemsData.length; i++) {
+            itemsData[i].qty = 0;
+            document.getElementById('val_' + i).textContent = "0";
+        }
+        updateSummary();
+    }
+</script>
+
+</body>
+</html>
