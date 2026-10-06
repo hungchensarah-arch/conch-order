@@ -65,20 +65,26 @@
             border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px;
         }
 
+        /* 彈出視窗 */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 10; justify-content: center; align-items: center;
         }
         .modal-content {
-            background: white; border-radius: 20px; width: 85%; max-width: 380px; padding: 30px;
+            background: white; border-radius: 20px; width: 85%; max-width: 380px; padding: 25px;
             text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        .success-icon { font-size: 50px; margin-bottom: 10px; }
-        .thank-title { font-size: 22px; font-weight: bold; color: #2ecc71; margin-bottom: 15px; }
-        .price-box { background-color: #f5f6fa; padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 16px; }
-        .price-amount { color: #e74c3c; font-size: 26px; font-weight: bold; }
-        .amber-notice { color: #636e72; font-size: 14px; line-height: 1.5; margin-top: 15px; text-align: left; }
-        .close-btn { background: #e67e22; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; width: 100%; font-size: 16px; }
+        .success-icon { font-size: 40px; margin-bottom: 5px; }
+        .thank-title { font-size: 22px; font-weight: bold; color: #2ecc71; margin-bottom: 10px; }
+        .price-box { background-color: #f5f6fa; padding: 10px; border-radius: 10px; margin: 10px 0; font-size: 15px; }
+        .price-amount { color: #e74c3c; font-size: 24px; font-weight: bold; }
+        
+        /* 訂單複製與文字框區 */
+        .text-box-label { font-size: 13px; color: #e67e22; font-weight: bold; text-align: left; margin: 10px 0 5px 0; display: block;}
+        textarea { width: 100%; height: 100px; border: 2px dashed #b2bec3; border-radius: 8px; padding: 8px; box-sizing: border-box; font-size: 13px; resize: none; background: #fafafa; }
+        
+        .amber-notice { color: #636e72; font-size: 13px; line-height: 1.4; margin-top: 12px; text-align: left; border-top: 1px dashed #dfe6e9; padding-top: 10px; }
+        .close-btn { background: #e67e22; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -90,67 +96,63 @@
     </div>
     <div class="subtitle">請填寫稱呼並選擇各口味數量，完成後一鍵送出</div>
 
-    <form id="orderForm">
-        <div class="name-group">
-            <label for="userName">👤 您的稱呼：</label>
-            <input type="text" id="userName" placeholder="請輸入您的名字" required>
+    <!-- 移除了 form 改用純 div 結構防止手機端行為衝突 -->
+    <div class="name-group">
+        <label for="userName">👤 您的稱呼：</label>
+        <input type="text" id="userName" placeholder="請輸入您的名字">
+    </div>
+
+    <div id="menu-container">
+        <div class="menu-section-title">經典單口味曲奇</div>
+        <div class="menu-item" data-price="280" data-name="奶油曲奇">
+            <div class="item-details"><div class="item-name">奶油曲奇</div><div class="item-price">$280</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="290" data-name="巧克力曲奇">
+            <div class="item-details"><div class="item-name">巧克力曲奇</div><div class="item-price">$290</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="290" data-name="咖啡曲奇">
+            <div class="item-details"><div class="item-name">咖啡曲奇</div><div class="item-price">$290</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="290" data-name="芝麻曲奇">
+            <div class="item-details"><div class="item-name">芝麻曲奇</div><div class="item-price">$290</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="290" data-name="伯爵紅茶曲奇">
+            <div class="item-details"><div class="item-name">伯爵紅茶曲奇</div><div class="item-price">$290</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="320" data-name="抹茶曲奇">
+            <div class="item-details"><div class="item-name">抹茶曲奇</div><div class="item-price">$320</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
         </div>
 
-        <div id="menu-container">
-            <div class="menu-section-title">經典單口味曲奇</div>
-            <div class="menu-item" data-price="280" data-name="奶油曲奇">
-                <div class="item-details"><div class="item-name">奶油曲奇</div><div class="item-price">$280</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="290" data-name="巧克力曲奇">
-                <div class="item-details"><div class="item-name">巧克力曲奇</div><div class="item-price">$290</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="290" data-name="咖啡曲奇">
-                <div class="item-details"><div class="item-name">咖啡曲奇</div><div class="item-price">$290</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="290" data-name="芝麻曲奇">
-                <div class="item-details"><div class="item-name">芝麻曲奇</div><div class="item-price">$290</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="290" data-name="伯爵紅茶曲奇">
-                <div class="item-details"><div class="item-name">伯爵紅茶曲奇</div><div class="item-price">$290</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="320" data-name="抹茶曲奇">
-                <div class="item-details"><div class="item-name">抹茶曲奇</div><div class="item-price">$320</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-
-            <div class="menu-section-title">熱門雙拼 / 三元曲奇</div>
-            <div class="menu-item" data-price="310" data-name="奶巧雙拼">
-                <div class="item-details"><div class="item-name">奶巧雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+巧克力)</span></div><div class="item-price">$310</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="310" data-name="奶咖雙拼">
-                <div class="item-details"><div class="item-name">奶咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+咖啡)</span></div><div class="item-price">$310</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="310" data-name="巧咖雙拼">
-                <div class="item-details"><div class="item-name">巧咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(巧克力+咖啡)</span></div><div class="item-price">$310</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-            <div class="menu-item" data-price="330" data-name="三元曲奇">
-                <div class="item-details"><div class="item-name">三元曲奇 <span style="font-size:12px; color:#7f8c8d;">(內含三種)</span></div><div class="item-price">$330</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
-
-            <div class="menu-section-title">其他</div>
-            <div class="menu-item" data-price="60" data-name="隨身小包">
-                <div class="item-details"><div class="item-name">隨身小包</div><div class="item-price">$60</div></div>
-                <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-            </div>
+        <div class="menu-section-title">熱門雙拼 / 三元曲奇</div>
+        <div class="menu-item" data-price="310" data-name="奶巧雙拼">
+            <div class="item-details"><div class="item-name">奶巧雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+巧克力)</span></div><div class="item-price">$310</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="310" data-name="奶咖雙拼">
+            <div class="item-details"><div class="item-name">奶咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+咖啡)</span></div><div class="item-price">$310</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="310" data-name="巧咖雙拼">
+            <div class="item-details"><div class="item-name">巧咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(巧克力+咖啡)</span></div><div class="item-price">$310</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+        <div class="menu-item" data-price="330" data-name="三元曲奇">
+            <div class="item-details"><div class="item-name">三元曲奇 <span style="font-size:12px; color:#7f8c8d;">(內含三種)</span></div><div class="item-price">$330</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
         </div>
 
-        <div class="summary-bar">
-            <div class="summary-text">
-                已選項目：<span id="totalItems">0</span> 盒/包<br>
-                應付金額：
-            </div>
-            <div class="total-amount">NT$ <span id="livePrice">0</span></div>
+        <div class="menu-section-title">其他</div>
+        <div class="menu-item" data-price="60" data-name="隨身小包">
+            <div class="item-details"><div class="item-name">隨身小包</div><div class="item-price">$60</div></div>
+            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+        </div>
+    </div>
+
+    <div class="summary-bar">
+        <div class="summary-text">
