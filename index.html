@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🐚 幸福海螺 Conch Baking 團購助手</title>
     <style>
         body {
@@ -43,14 +43,18 @@
         .item-name { font-weight: bold; color: #2d3436; font-size: 16px; }
         .item-price { color: #e67e22; font-size: 14px; font-weight: bold; margin-top: 2px; }
         
+        /* 數量控制區 */
         .counter { display: flex; align-items: center; gap: 12px; }
-        .counter-btn {
-            background-color: #f1f2f6; border: none; width: 34px; height: 34px;
-            border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer;
+        
+        /* 將按鈕改為純 div，徹底解決手機點擊失效問題 */
+        .btn-calc {
+            background-color: #f1f2f6; width: 36px; height: 36px;
+            border-radius: 50%; font-size: 22px; font-weight: bold; cursor: pointer;
             display: flex; justify-content: center; align-items: center; color: #2d3436;
+            user-select: none; -webkit-tap-highlight-color: transparent;
         }
-        .counter-btn:hover { background-color: #dfe6e9; }
-        .counter-value { font-size: 16px; font-weight: bold; width: 20px; text-align: center; }
+        .btn-calc:active { background-color: #dfe6e9; }
+        .counter-value { font-size: 18px; font-weight: bold; width: 24px; text-align: center; color: #2d3436; }
 
         .summary-bar {
             background: #f5f6fa; border-radius: 12px; padding: 15px;
@@ -59,32 +63,34 @@
         .summary-text { font-size: 15px; color: #2d3436; text-align: left; line-height: 1.4; }
         .total-amount { color: #e74c3c; font-size: 22px; font-weight: bold; }
 
-        .order-btn {
+        /* 大送出按鈕 */
+        .btn-submit {
             background: linear-gradient(135deg, #e67e22, #f39c12);
-            color: white; border: none; width: 100%; padding: 15px;
+            color: white; width: 100%; padding: 15px; text-align: center;
             border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px;
+            box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent;
         }
+        .btn-submit:active { opacity: 0.9; }
 
         /* 彈出視窗 */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 10; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.6); z-index: 100; justify-content: center; align-items: center;
         }
         .modal-content {
             background: white; border-radius: 20px; width: 85%; max-width: 380px; padding: 25px;
-            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); box-sizing: border-box;
         }
         .success-icon { font-size: 40px; margin-bottom: 5px; }
         .thank-title { font-size: 22px; font-weight: bold; color: #2ecc71; margin-bottom: 10px; }
         .price-box { background-color: #f5f6fa; padding: 10px; border-radius: 10px; margin: 10px 0; font-size: 15px; }
         .price-amount { color: #e74c3c; font-size: 24px; font-weight: bold; }
         
-        /* 訂單複製與文字框區 */
         .text-box-label { font-size: 13px; color: #e67e22; font-weight: bold; text-align: left; margin: 10px 0 5px 0; display: block;}
-        textarea { width: 100%; height: 100px; border: 2px dashed #b2bec3; border-radius: 8px; padding: 8px; box-sizing: border-box; font-size: 13px; resize: none; background: #fafafa; }
+        textarea { width: 100%; height: 110px; border: 2px dashed #b2bec3; border-radius: 8px; padding: 8px; box-sizing: border-box; font-size: 13px; resize: none; background: #fafafa; }
         
         .amber-notice { color: #636e72; font-size: 13px; line-height: 1.4; margin-top: 12px; text-align: left; border-top: 1px dashed #dfe6e9; padding-top: 10px; }
-        .close-btn { background: #e67e22; color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; font-size: 16px; }
+        .btn-close { background: #e67e22; color: white; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 15px; width: 100%; font-size: 16px; text-align: center; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -96,63 +102,54 @@
     </div>
     <div class="subtitle">請填寫稱呼並選擇各口味數量，完成後一鍵送出</div>
 
-    <!-- 移除了 form 改用純 div 結構防止手機端行為衝突 -->
     <div class="name-group">
         <label for="userName">👤 您的稱呼：</label>
         <input type="text" id="userName" placeholder="請輸入您的名字">
     </div>
 
+    <!-- 利用 HTML 直接綁定 onclick 函數，避開所有手機版安全限制 -->
     <div id="menu-container">
         <div class="menu-section-title">經典單口味曲奇</div>
         <div class="menu-item" data-price="280" data-name="奶油曲奇">
             <div class="item-details"><div class="item-name">奶油曲奇</div><div class="item-price">$280</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_0">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="290" data-name="巧克力曲奇">
             <div class="item-details"><div class="item-name">巧克力曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_1">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="290" data-name="咖啡曲奇">
             <div class="item-details"><div class="item-name">咖啡曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_2">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="290" data-name="芝麻曲奇">
             <div class="item-details"><div class="item-name">芝麻曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_3">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="290" data-name="伯爵紅茶曲奇">
             <div class="item-details"><div class="item-name">伯爵紅茶曲奇</div><div class="item-price">$290</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_4">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="320" data-name="抹茶曲奇">
             <div class="item-details"><div class="item-name">抹茶曲奇</div><div class="item-price">$320</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_5">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
 
         <div class="menu-section-title">熱門雙拼 / 三元曲奇</div>
         <div class="menu-item" data-price="310" data-name="奶巧雙拼">
             <div class="item-details"><div class="item-name">奶巧雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+巧克力)</span></div><div class="item-price">$310</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_6">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="310" data-name="奶咖雙拼">
             <div class="item-details"><div class="item-name">奶咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(奶油+咖啡)</span></div><div class="item-price">$310</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_7">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="310" data-name="巧咖雙拼">
             <div class="item-details"><div class="item-name">巧咖雙拼 <span style="font-size:12px; color:#7f8c8d;">(巧克力+咖啡)</span></div><div class="item-price">$310</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_8">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
         <div class="menu-item" data-price="330" data-name="三元曲奇">
             <div class="item-details"><div class="item-name">三元曲奇 <span style="font-size:12px; color:#7f8c8d;">(內含三種)</span></div><div class="item-price">$330</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
+            <div class="counter"><div class="btn-calc" onclick="changeQty(this, -1)">-</div><span class="counter-value" id="qty_9">0</span><div class="btn-calc" onclick="changeQty(this, 1)">+</div></div>
         </div>
 
-        <div class="menu-section-title">其他</div>
-        <div class="menu-item" data-price="60" data-name="隨身小包">
-            <div class="item-details"><div class="item-name">隨身小包</div><div class="item-price">$60</div></div>
-            <div class="counter"><button type="button" class="counter-btn minus">-</button><span class="counter-value">0</span><button type="button" class="counter-btn plus">+</button></div>
-        </div>
-    </div>
-
-    <div class="summary-bar">
-        <div class="summary-text">
